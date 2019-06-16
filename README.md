@@ -1,4 +1,4 @@
-## Recommendation via Collaborative AutoregressiveFiltering (CAF)
+## Recommendation via Collaborative Autoregressive Filtering (CAF)
 
 This is the python implementation -- a item recommendation model using Collaborative Autoregressive Flows.
 
