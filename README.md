@@ -3,8 +3,9 @@
 This is the python implementation -- a item recommendation model using Collaborative Autoregressive Flows.
 
 ## Requirements
-The code written in Python2.7
-to run this code you need to have tensorflow >= 1.3.0 and numpy >= 1.14.0
+- python2.7
+- tensorflow >= 1.3.0
+- numpy >= 1.14.0
 
 ------------------
 
