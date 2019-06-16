@@ -10,6 +10,12 @@ This is the python implementation -- a item recommendation model using Collabora
 ------------------
 
 ## Datasets
+Here are three datasets we used in our paper. 
+- CiteULike: <http://www.citeulike.org/>
+
+- MovieLens: <https://grouplens.org/datasets/movielens/1M/>
+
+- LastFM: <http://www.lastfm.com/>
 
 | Datasets        |    #Users    | #Items  |#interaction |Sparsity |
 | ------------- |:-------------:| :-----:|:--------:|:--------:|
