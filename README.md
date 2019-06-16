@@ -23,6 +23,7 @@ For each dataset, we randomly select 70% of the user accessrecord as the trainin
 To run CAF, please first clone the code to your python IDE(eg: Pycharm), then run the code CAF.py, all the core codes are written in the file -- CAF.py. After running CAF.py, you may get a directory containing a caf_pmf.mat file. Then you can copy caf_pmf.mat into test_matrics.py file to calculate Precision, Recall, Map, nDCG. 
 
 To customize the code:
+
 a、You can set this latent dimension (latent_size) to 100 or other dimensions(in our paper, we use 100), which will affect the training time. The larger the dimension, the longer the training time will be. But the bigger the dimension, the better the effect is not necessarily, you need to find a suitable dimension.
 
 b、You need to set the number of flows, in our paper, the best performance is achieved when K=7 for MovieLens and K=5 for CiteULike on all metrics.
