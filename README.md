@@ -21,7 +21,7 @@ This is the python implementation -- a item recommendation model using Collabora
 For each dataset, we randomly select 70% of the user accessrecord as the training set and the remaining as the validation (10%)and testing (20%) data.
 
 ## Usage
-To run CAF, please first clone the code to your python IDE(eg: Pycharm), then run the code CAF.py, all the core codes are written in the file -- CAF.py. After running CAF.py, you may get a directory containing a caf_pmf.mat file. Then you can copy caf_pmf.mat into test_matrics.py file to calculate Precision, Recall, Map, nDCG. 
+To run CAF, please first clone the code (http://github.com/moyu717/CAF) to your python IDE(eg: Pycharm), then run the code CAF.py, all the core codes are written in the file -- CAF.py. After running CAF.py, you may get a directory containing a caf_pmf.mat file. Then you can copy caf_pmf.mat into test_matrics.py file to calculate Precision, Recall, Map, nDCG. 
 
 To customize the code:
 
