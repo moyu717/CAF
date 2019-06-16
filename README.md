@@ -15,6 +15,8 @@ to run this code you need to have tensorflow >= 1.3.0 and numpy >= 1.14.0
 | CiteULike     |5,551|  16,980|   204,986 |     99.8%|
 | MovieLens     |6,040 | 3,544 |   993,482 |     95.4%|
 | LastFM  |1,892  |17,632 |  92,834 |      97.3%|
+
+
 For each dataset, we randomly select 70% of the user accessrecord as the training set and the remaining as the validation (10%)and testing (20%) data.
 
 ## Usage
