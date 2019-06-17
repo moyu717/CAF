@@ -27,8 +27,6 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 log.addHandler(consoleHandler)
 
-user_num, poi_num = 6040, 3544  # for MovieLens
-# user_num, poi_num = 5551, 16980   #  for CiteULike
 
 class caf:
     def __init__(self, nFlows, num_users, num_items, num_factors, input_dim, input_dim_user,batch_size,
@@ -41,6 +39,7 @@ class caf:
         self.m_num_factors = num_factors
         self.input_dim_user = input_dim_user
         self.batch_size = batch_size
+        keep_prob = tf.placeholder(tf.float32)
         self.u = tf.placeholder(tf.int32, [None])
         self.i = tf.placeholder(tf.int32, [None])
         self.j = tf.placeholder(tf.int32, [None])
@@ -156,6 +155,7 @@ class caf:
             tf.matmul(x, rec['W1']) + rec['b1'])
         h2 = tf.nn.sigmoid(
             tf.matmul(h1, rec['W2']) + rec['b2'])
+        h2 = tf.nn.dropout( h2, keep_prob)
 
         self.z_mean = tf.matmul(h2, rec['W_z_mean']) + rec['b_z_mean']  # 
         self.z_log_sigma_sq = tf.matmul(h2, rec['W_z_log_sigma']) + rec['b_z_log_sigma']  # 
@@ -211,6 +211,7 @@ class caf:
             tf.matmul(x, rec_user['W1']) + rec_user['b1'])
         h2 = tf.nn.sigmoid(
             tf.matmul(h1, rec_user['W2']) + rec_user['b2'])
+        h2 = tf.nn.dropout( h2, keep_prob)
         self.z_mean_user = tf.matmul(h2, rec_user['W_z_mean']) + rec_user['b_z_mean']
         self.z_log_sigma_sq_user = tf.matmul(h2, rec_user['W_z_log_sigma']) + rec_user[
             'b_z_log_sigma']
@@ -248,7 +249,7 @@ class caf:
         h1 = tf.nn.relu(
             tf.matmul(h2, gen['w_mu']) + gen['b_mu'])
         out_mu = tf.matmul(h1, gen['w_v']) + gen['b_v']
-
+        
         out_log_var = tf.matmul(h1, gen['w_v1']) + gen['b_v1']
         out = tf.nn.sigmoid(out_mu)
         return out, out_mu, out_log_var
@@ -356,7 +357,7 @@ class caf:
                 print "b shape", b.get_shape()
                 if invert_condition:
                     uw = tf.reduce_sum(tf.matmul(w, u, transpose_a=True),
-                                       axis=1, keep_dims=True)  # u: (?,2), w: (?,2), b: (?,)
+                                       axis=1, keep_dims=True)  
                     muw = -1 + tf.nn.softplus(uw)  # = -1 + T.log(1 + T.exp(uw))
                     u_hat = u + tf.multiply(tf.transpose((muw - uw)), w) / tf.norm(w, axis=[-2, -1])
                     print "norm_w shape", tf.norm(w, axis=[-2, -1]).get_shape()
@@ -368,13 +369,11 @@ class caf:
                 zw = tf.reduce_sum(tf.multiply(tf.cast(z, tf.float32), w), axis=1)
                 zwb = zw + b
                 z = z + u_hat * tf.reshape(tf.tanh(zwb), [-1, 1])  # z is (?,2)
-                psi = tf.reshape((1 - tf.tanh(zwb) ** 2), [-1, 1]) * w  # Equation 11. # tanh(x)dx = 1 - tanh(x)**2
+                psi = tf.reshape((1 - tf.tanh(zwb) ** 2), [-1, 1]) * w  
                 # psi= tf.reduce_sum(tf.matmul(tf.transpose(1-self.tanh(zwb)**2), self.w))
                 psi_u = tf.reduce_sum(tf.matmul(u_hat, psi, transpose_b=True),
                                       axis=1, keep_dims=True)
-                # psi_u= tf.matmul(tf.transpose(u_hat), tf.transpose(psi)) # Second term in equation 12. u_transpose*psi_z
-                logdet_jacobian = tf.log(tf.clip_by_value(tf.abs(1 + psi_u), 1e-4, 1e7))  # Equation 12
-                # print "f_z shape", f_z.get_shape()
+                logdet_jacobian = tf.log(tf.clip_by_value(tf.abs(1 + psi_u), 1e-4, 1e7))  
                 log_detjs.append(logdet_jacobian)
                 logdet_jacobian = tf.concat(log_detjs[0:nFlows + 1], axis=1)
                 sum_logdet_jacobian = tf.reduce_mean(logdet_jacobian)
@@ -480,6 +479,7 @@ class caf:
                                                                     feed_dict={self.x: b_x, self.v: self.m_V[ids, :],
                                                                                self.x_user: b_x_user,
                                                                                self.v_user: self.m_U[ids_user, :],
+                                                                               keep_prob: 0.5,
                                                               self.u: uij[:, 0], self.i: uij[:, 1], self.j: uij[:, 2]})
 
             loss_app.append(all_loss)
@@ -588,8 +588,9 @@ def txt2array(file_path):
 train_users, train_items, training_matrix_1, training_matrix_user_1,\
 user_ratings, user_ratings_test = data_processing()
 latent_size = 300
-CAF = caf(nFlows=32, num_users=user_num, num_items=poi_num, num_factors=latent_size, batch_size=32,
-    input_dim=user_num, input_dim_user=poi_num,  dims=[600, 300], n_z=latent_size, lr=1e-6,
+user_num, item_num = 1000, 5000
+CAF = caf(nFlows=32, num_users=user_num, num_items=item_num, num_factors=latent_size, batch_size=32,
+    input_dim=user_num, input_dim_user=item_num,  dims=[600, 300], n_z=latent_size, lr=1e-6,
           verbose=False, invert_condition=True, beta=False)
 
 CAF.run(train_users, train_items, training_matrix_1, training_matrix_user_1,
