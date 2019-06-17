@@ -584,17 +584,18 @@ def txt2array(file_path):
                 print 1
         arr.append(l)
     return arr
+def main():
+    train_users, train_items, training_matrix_1, training_matrix_user_1,\
+    user_ratings, user_ratings_test = data_processing()
+    latent_size = 300
+    user_num, item_num = 1000, 5000
+    CAF = caf(nFlows=32, num_users=user_num, num_items=item_num, num_factors=latent_size, batch_size=32,
+              input_dim=user_num, input_dim_user=item_num,  dims=[600, 300], n_z=latent_size, lr=1e-6,
+              verbose=False, invert_condition=True, beta=False)
 
-train_users, train_items, training_matrix_1, training_matrix_user_1,\
-user_ratings, user_ratings_test = data_processing()
-latent_size = 300
-user_num, item_num = 1000, 5000
-CAF = caf(nFlows=32, num_users=user_num, num_items=item_num, num_factors=latent_size, batch_size=32,
-    input_dim=user_num, input_dim_user=item_num,  dims=[600, 300], n_z=latent_size, lr=1e-6,
-          verbose=False, invert_condition=True, beta=False)
-
-CAF.run(train_users, train_items, training_matrix_1, training_matrix_user_1,
-        user_ratings, user_ratings_test)
-CAF.save_model(
-    weight_path="model/caf_weight",
-    pmf_path="model/caf_pmf")
+    CAF.run(train_users, train_items, training_matrix_1, training_matrix_user_1,
+            user_ratings, user_ratings_test)
+    CAF.save_model(weight_path="model/caf_weight",
+                   pmf_path="model/caf_pmf")
+if __name__ == "__main__":
+    main()
