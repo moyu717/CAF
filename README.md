@@ -1,6 +1,6 @@
 ## Recommendation via Collaborative Autoregressive Filtering (CAF)
 
-This is the python implementation -- a item recommendation model using Collaborative Autoregressive Flows.
+This is the python implementation -- an item recommendation model using Collaborative Autoregressive Flows.
 
 ## Requirements
 - python2.7
@@ -24,7 +24,7 @@ Here are three datasets we used in our paper.
 | LastFM  |1,892  |17,632 |  92,834 |      97.3%|
 
 
-For each dataset, we randomly select 70% of the user accessrecord as the training set and the remaining as the validation (10%)and testing (20%) data.
+For each dataset, we randomly select 70% of the user access record as the training set and the remaining as the validation (10%)and testing (20%) data.
 
 ------------------
 
@@ -33,8 +33,8 @@ To run CAF, please first clone the code (http://github.com/moyu717/CAF) to your 
 
 To customize the code:
 
-a、You can set this latent dimension (latent_size) to 100 or other dimensions(in our paper, we use 100),  which will affect the training time.  The larger the dimension, the longer the training time will be.  But the bigger the dimension,  the better the effect is not necessarily,  you need to find a suitable dimension.
+a、You can set the latent dimension (latent_size) to 100 or other values (in our paper, we use 100). The larger the dimensions, the longer the training time.
 
-b、You need to set the number of flows,  in our paper,  the best performance is achieved when K=7 for MovieLens and K=5 for CiteULike and LastFM on all metrics.
+b、You need to set the number of flows. In our paper, the best performance is achieved when K=7 for MovieLens and K=5 for CiteULike and LastFM on all metrics.
 
-c、You can use your own data sets in the source code.
+c、You can test the source code with your own datasets.
